@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Age Calculator — QuickCalc</title>
+<meta name="description" content="Free age calculator. Find your exact age in years, months, and days. See how many days until your next birthday. No signup required.">
+<!-- Google Analytics — replace YOUR_GA4_ID with your real ID e.g. G-XXXXXXXXXX -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_GA4_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'YOUR_GA4_ID');
+</script>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0a0f'/><text y='.9em' font-size='80' x='10'>%</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --bg: #0a0a0f; --surface: #12121a; --card: #1a1a26; --border: #2a2a3a; --accent: #ffdd7f; --accent2: #7fffb2; --accent3: #ff7faa; --text: #e8e8f0; --muted: #6a6a8a; --font-head: 'Syne', sans-serif; --font-mono: 'DM Mono', monospace; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-head); min-height: 100vh; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(255,221,127,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,221,127,0.03) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
+  .glow { position: fixed; width: 500px; height: 500px; border-radius: 50%; filter: blur(120px); opacity: 0.1; pointer-events: none; z-index: 0; }
+  .glow.a { background: var(--accent); top: -150px; right: -100px; }
+  .glow.b { background: var(--accent3); bottom: -150px; left: -100px; }
+  .container { position: relative; z-index: 1; max-width: 620px; margin: 0 auto; padding: 48px 24px 80px; }
+  .back { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 32px; transition: color 0.2s; }
+  .back:hover { color: var(--accent); }
+  .logo { font-size: 2.4rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 4px; }
+  .logo span { color: var(--accent); }
+  .tagline { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); margin-bottom: 36px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 36px; position: relative; overflow: hidden; animation: fadeUp 0.5s ease both; }
+  .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent3)); }
+  .field { margin-bottom: 24px; }
+  .field label { display: block; font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 8px; }
+  .field input[type="date"] { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; font-family: var(--font-mono); font-size: 1.1rem; color: var(--text); outline: none; transition: border-color 0.2s; color-scheme: dark; }
+  .field input[type="date"]:focus { border-color: var(--accent); }
+  .result { margin-top: 28px; display: none; animation: fadeUp 0.3s ease both; }
+  .result.show { display: block; }
+  .big-age { font-size: 4rem; font-weight: 800; color: var(--accent); line-height: 1; }
+  .big-label { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); margin-bottom: 24px; margin-top: 4px; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; }
+  .stat-val { font-size: 1.4rem; font-weight: 800; color: var(--text); }
+  .stat-label { font-family: var(--font-mono); font-size: 0.65rem; color: var(--muted); margin-top: 4px; }
+  .birthday-box { background: var(--surface); border: 1px solid var(--accent); border-radius: 12px; padding: 18px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--accent); text-align: center; }
+  footer { text-align: center; margin-top: 48px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<div class="glow a"></div><div class="glow b"></div>
+<div class="container">
+  <a href="index.html" class="back">← All Tools</a>
+  <div class="logo">Quick<span>Calc</span></div>
+  <div class="tagline">// Age Calculator — no signup required</div>
+  <div class="card">
+    <div class="field"><label>YOUR DATE OF BIRTH</label><input type="date" id="dob" onchange="calcAge()"></div>
+    <div class="field"><label>AGE ON DATE (defaults to today)</label><input type="date" id="ref-date" onchange="calcAge()"></div>
+    <div class="result" id="result">
+      <div class="big-age" id="years-big">—</div>
+      <div class="big-label">years old</div>
+      <div class="stats">
+        <div class="stat"><div class="stat-val" id="stat-y">—</div><div class="stat-label">YEARS</div></div>
+        <div class="stat"><div class="stat-val" id="stat-m">—</div><div class="stat-label">MONTHS</div></div>
+        <div class="stat"><div class="stat-val" id="stat-d">—</div><div class="stat-label">DAYS</div></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="stat-val" id="stat-td">—</div><div class="stat-label">TOTAL DAYS</div></div>
+        <div class="stat"><div class="stat-val" id="stat-tw">—</div><div class="stat-label">TOTAL WEEKS</div></div>
+        <div class="stat"><div class="stat-val" id="stat-th">—</div><div class="stat-label">TOTAL HOURS</div></div>
+      </div>
+      <div class="birthday-box" id="bday-box"></div>
+    </div>
+  </div>
+  <footer>QuickCalc &mdash; Free. Fast. No signup.</footer>
+</div>
+<script>
+const today = new Date();
+const todayStr = today.toISOString().split('T')[0];
+document.getElementById('ref-date').value = todayStr;
+function calcAge() {
+  const dobVal = document.getElementById('dob').value;
+  if (!dobVal) return;
+  const dob = new Date(dobVal);
+  const refVal = document.getElementById('ref-date').value || todayStr;
+  const ref = new Date(refVal);
+  if (dob > ref) return;
+  let years = ref.getFullYear() - dob.getFullYear();
+  let months = ref.getMonth() - dob.getMonth();
+  let days = ref.getDate() - dob.getDate();
+  if (days < 0) { months--; const prevMonth = new Date(ref.getFullYear(), ref.getMonth(), 0); days += prevMonth.getDate(); }
+  if (months < 0) { years--; months += 12; }
+  const totalDays = Math.floor((ref - dob) / 86400000);
+  const totalWeeks = Math.floor(totalDays / 7);
+  const totalHours = totalDays * 24;
+  document.getElementById('years-big').textContent = years;
+  document.getElementById('stat-y').textContent = years;
+  document.getElementById('stat-m').textContent = months;
+  document.getElementById('stat-d').textContent = days;
+  document.getElementById('stat-td').textContent = totalDays.toLocaleString();
+  document.getElementById('stat-tw').textContent = totalWeeks.toLocaleString();
+  document.getElementById('stat-th').textContent = totalHours.toLocaleString();
+  const refYear = ref.getFullYear();
+  let nextBday = new Date(refYear, dob.getMonth(), dob.getDate());
+  if (nextBday <= ref) nextBday = new Date(refYear + 1, dob.getMonth(), dob.getDate());
+  const daysUntil = Math.ceil((nextBday - ref) / 86400000);
+  const bdayBox = document.getElementById('bday-box');
+  if (daysUntil === 0) bdayBox.textContent = '🎂 Happy Birthday!';
+  else bdayBox.textContent = `🎂 Next birthday in ${daysUntil} day${daysUntil !== 1 ? 's' : ''}`;
+  document.getElementById('result').classList.add('show');
+}
+</script>
+</body>
+</html>

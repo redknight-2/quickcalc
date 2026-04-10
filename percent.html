@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Percentage Calculator — QuickCalc</title>
+<meta name="description" content="Free percentage calculator. Find percentage of a number, percentage change, increase, decrease and more. No signup required.">
+<!-- Google Analytics — replace YOUR_GA4_ID with your real ID e.g. G-XXXXXXXXXX -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_GA4_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'YOUR_GA4_ID');
+</script>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0a0f'/><text y='.9em' font-size='80' x='10'>%</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --bg: #0a0a0f; --surface: #12121a; --card: #1a1a26; --border: #2a2a3a; --accent: #7fffb2; --accent2: #7fc8ff; --accent3: #ff7faa; --text: #e8e8f0; --muted: #6a6a8a; --font-head: 'Syne', sans-serif; --font-mono: 'DM Mono', monospace; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-head); min-height: 100vh; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(127,255,178,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(127,255,178,0.03) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
+  .glow { position: fixed; width: 500px; height: 500px; border-radius: 50%; filter: blur(120px); opacity: 0.1; pointer-events: none; z-index: 0; }
+  .glow.a { background: var(--accent); top: -150px; left: -150px; }
+  .glow.b { background: var(--accent2); bottom: -150px; right: -150px; }
+  .container { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; padding: 48px 24px 80px; }
+  .back { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 32px; transition: color 0.2s; }
+  .back:hover { color: var(--accent); }
+  .logo { font-size: 2.4rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 4px; }
+  .logo span { color: var(--accent); }
+  .tagline { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); margin-bottom: 36px; }
+  .modes { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+  .mode-btn { padding: 8px 16px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); font-family: var(--font-head); font-weight: 700; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; }
+  .mode-btn.active { background: var(--accent); border-color: var(--accent); color: #0a0a0f; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 36px; position: relative; overflow: hidden; animation: fadeUp 0.5s ease both; }
+  .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+  .mode-panel { display: none; }
+  .mode-panel.active { display: block; }
+  .inline-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+  .inline-row .q-text { font-family: var(--font-mono); font-size: 0.85rem; color: var(--muted); white-space: nowrap; }
+  .inline-row input { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; font-family: var(--font-mono); font-size: 1rem; color: var(--text); outline: none; transition: border-color 0.2s; width: 120px; }
+  .inline-row input:focus { border-color: var(--accent); }
+  .result-box { background: var(--surface); border: 1px solid var(--accent); border-radius: 14px; padding: 22px 24px; display: flex; align-items: baseline; gap: 12px; margin-top: 8px; }
+  .result-num { font-size: 2.8rem; font-weight: 800; color: var(--accent); }
+  .result-num.negative { color: var(--accent3); }
+  .result-desc { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); }
+  footer { text-align: center; margin-top: 48px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 480px) { .inline-row input { width: 90px; } }
+</style>
+</head>
+<body>
+<div class="glow a"></div><div class="glow b"></div>
+<div class="container">
+  <a href="index.html" class="back">← All Tools</a>
+  <div class="logo">Quick<span>Calc</span></div>
+  <div class="tagline">// Percentage Calculator — no signup required</div>
+  <div class="modes">
+    <button class="mode-btn active" onclick="setMode(0)">% of Number</button>
+    <button class="mode-btn" onclick="setMode(1)">% Change</button>
+    <button class="mode-btn" onclick="setMode(2)">X is % of Y</button>
+    <button class="mode-btn" onclick="setMode(3)">Increase / Decrease</button>
+  </div>
+  <div class="card">
+    <div class="mode-panel active" id="mode-0">
+      <div class="inline-row">
+        <span class="q-text">What is</span>
+        <input type="number" id="m0-pct" placeholder="15" oninput="calc0()">
+        <span class="q-text">% of</span>
+        <input type="number" id="m0-num" placeholder="200" oninput="calc0()">
+        <span class="q-text">?</span>
+      </div>
+      <div class="result-box"><div class="result-num" id="m0-res">—</div><div class="result-desc" id="m0-desc"></div></div>
+    </div>
+    <div class="mode-panel" id="mode-1">
+      <div class="inline-row">
+        <span class="q-text">From</span>
+        <input type="number" id="m1-from" placeholder="80" oninput="calc1()">
+        <span class="q-text">to</span>
+        <input type="number" id="m1-to" placeholder="100" oninput="calc1()">
+      </div>
+      <div class="result-box"><div class="result-num" id="m1-res">—</div><div class="result-desc" id="m1-desc"></div></div>
+    </div>
+    <div class="mode-panel" id="mode-2">
+      <div class="inline-row">
+        <input type="number" id="m2-x" placeholder="30" oninput="calc2()">
+        <span class="q-text">is what % of</span>
+        <input type="number" id="m2-y" placeholder="200" oninput="calc2()">
+        <span class="q-text">?</span>
+      </div>
+      <div class="result-box"><div class="result-num" id="m2-res">—</div><div class="result-desc" id="m2-desc"></div></div>
+    </div>
+    <div class="mode-panel" id="mode-3">
+      <div class="inline-row">
+        <input type="number" id="m3-num" placeholder="200" oninput="calc3()">
+        <select id="m3-dir" onchange="calc3()" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:var(--font-head);font-weight:700;font-size:0.88rem;outline:none;cursor:pointer;">
+          <option value="inc">increased by</option>
+          <option value="dec">decreased by</option>
+        </select>
+        <input type="number" id="m3-pct" placeholder="20" oninput="calc3()">
+        <span class="q-text">%</span>
+      </div>
+      <div class="result-box"><div class="result-num" id="m3-res">—</div><div class="result-desc" id="m3-desc"></div></div>
+    </div>
+  </div>
+  <footer>QuickCalc &mdash; Free. Fast. No signup.</footer>
+</div>
+<script>
+let currentMode = 0;
+function setMode(m) {
+  currentMode = m;
+  document.querySelectorAll('.mode-panel').forEach((p,i) => p.classList.toggle('active', i===m));
+  document.querySelectorAll('.mode-btn').forEach((b,i) => b.classList.toggle('active', i===m));
+}
+function fmt(n) { if (isNaN(n) || !isFinite(n)) return '—'; return parseFloat(n.toPrecision(8)).toString(); }
+function calc0() {
+  const pct = parseFloat(document.getElementById('m0-pct').value);
+  const num = parseFloat(document.getElementById('m0-num').value);
+  if (isNaN(pct) || isNaN(num)) { document.getElementById('m0-res').textContent = '—'; return; }
+  const r = (pct / 100) * num;
+  document.getElementById('m0-res').textContent = fmt(r);
+  document.getElementById('m0-desc').textContent = `${pct}% of ${num} = ${fmt(r)}`;
+}
+function calc1() {
+  const from = parseFloat(document.getElementById('m1-from').value);
+  const to = parseFloat(document.getElementById('m1-to').value);
+  if (isNaN(from) || isNaN(to) || from === 0) { document.getElementById('m1-res').textContent = '—'; return; }
+  const change = ((to - from) / Math.abs(from)) * 100;
+  const el = document.getElementById('m1-res');
+  el.textContent = (change >= 0 ? '+' : '') + fmt(change) + '%';
+  el.className = 'result-num' + (change < 0 ? ' negative' : '');
+  document.getElementById('m1-desc').textContent = change >= 0 ? `increase of ${fmt(Math.abs(change))}%` : `decrease of ${fmt(Math.abs(change))}%`;
+}
+function calc2() {
+  const x = parseFloat(document.getElementById('m2-x').value);
+  const y = parseFloat(document.getElementById('m2-y').value);
+  if (isNaN(x) || isNaN(y) || y === 0) { document.getElementById('m2-res').textContent = '—'; return; }
+  const r = (x / y) * 100;
+  document.getElementById('m2-res').textContent = fmt(r) + '%';
+  document.getElementById('m2-desc').textContent = `${x} is ${fmt(r)}% of ${y}`;
+}
+function calc3() {
+  const num = parseFloat(document.getElementById('m3-num').value);
+  const pct = parseFloat(document.getElementById('m3-pct').value);
+  const dir = document.getElementById('m3-dir').value;
+  if (isNaN(num) || isNaN(pct)) { document.getElementById('m3-res').textContent = '—'; return; }
+  const r = dir === 'inc' ? num * (1 + pct/100) : num * (1 - pct/100);
+  document.getElementById('m3-res').textContent = fmt(r);
+  document.getElementById('m3-desc').textContent = `${num} ${dir === 'inc' ? '+' : '−'} ${pct}% = ${fmt(r)}`;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuickCalc — Free Online Tools</title>
+<meta name="description" content="Free online tools — unit converter, BMI calculator, tip splitter, age calculator, percentage calculator. Fast, no signup required.">
+<!-- Google Analytics — replace YOUR_GA4_ID with your real ID e.g. G-XXXXXXXXXX -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_GA4_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'YOUR_GA4_ID');
+</script>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0a0f'/><text y='.9em' font-size='80' x='10'>%</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0a0f; --surface: #12121a; --card: #1a1a26; --border: #2a2a3a;
+    --accent: #7fffb2; --accent2: #ff7faa; --accent3: #7fc8ff;
+    --text: #e8e8f0; --muted: #6a6a8a;
+    --font-head: 'Syne', sans-serif; --font-mono: 'DM Mono', monospace;
+  }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-head); min-height: 100vh; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(127,255,178,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(127,255,178,0.03) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
+  .glow { position: fixed; width: 500px; height: 500px; border-radius: 50%; filter: blur(120px); opacity: 0.1; pointer-events: none; z-index: 0; }
+  .glow.a { background: var(--accent); top: -150px; left: -150px; }
+  .glow.b { background: var(--accent2); bottom: -150px; right: -150px; }
+  .container { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 56px 24px 80px; }
+  header { margin-bottom: 64px; animation: fadeDown 0.6s ease both; }
+  .logo { font-size: 3rem; font-weight: 800; letter-spacing: -0.03em; }
+  .logo span { color: var(--accent); }
+  .tagline { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); margin-top: 8px; letter-spacing: 0.1em; }
+  .section-label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; margin-bottom: 20px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .tool-card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 28px; text-decoration: none; color: var(--text); transition: all 0.25s; position: relative; overflow: hidden; animation: fadeUp 0.5s ease both; }
+  .tool-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; opacity: 0; transition: opacity 0.25s; }
+  .tool-card:nth-child(1)::before { background: linear-gradient(90deg, var(--accent), var(--accent3)); }
+  .tool-card:nth-child(2)::before { background: linear-gradient(90deg, var(--accent2), #ffaa7f); }
+  .tool-card:nth-child(3)::before { background: linear-gradient(90deg, var(--accent3), #aa7fff); }
+  .tool-card:nth-child(4)::before { background: linear-gradient(90deg, #ffdd7f, var(--accent2)); }
+  .tool-card:nth-child(5)::before { background: linear-gradient(90deg, var(--accent), #7fffdd); }
+  .tool-card:hover { transform: translateY(-4px); border-color: #3a3a5a; }
+  .tool-card:hover::before { opacity: 1; }
+  .tool-icon { font-size: 2rem; margin-bottom: 14px; }
+  .tool-name { font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; }
+  .tool-desc { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); line-height: 1.6; }
+  footer { text-align: center; margin-top: 64px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); }
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<div class="glow a"></div><div class="glow b"></div>
+<div class="container">
+  <header>
+    <div class="logo">Quick<span>Calc</span></div>
+    <div class="tagline">// free tools — no signup required</div>
+  </header>
+  <div class="section-label">All Tools</div>
+  <div class="grid">
+    <a href="converter.html" class="tool-card">
+      <div class="tool-icon">⇄</div>
+      <div class="tool-name">Unit Converter</div>
+      <div class="tool-desc">Length, weight, temperature, speed & area — all in one place.</div>
+    </a>
+    <a href="bmi.html" class="tool-card">
+      <div class="tool-icon">⚖️</div>
+      <div class="tool-name">BMI Calculator</div>
+      <div class="tool-desc">Calculate your Body Mass Index with metric or imperial units.</div>
+    </a>
+    <a href="tip.html" class="tool-card">
+      <div class="tool-icon">🧾</div>
+      <div class="tool-name">Tip & Bill Splitter</div>
+      <div class="tool-desc">Split any bill with tip across any number of people instantly.</div>
+    </a>
+    <a href="age.html" class="tool-card">
+      <div class="tool-icon">🎂</div>
+      <div class="tool-name">Age Calculator</div>
+      <div class="tool-desc">Find exact age in years, months, days — and days until next birthday.</div>
+    </a>
+    <a href="percent.html" class="tool-card">
+      <div class="tool-icon">%</div>
+      <div class="tool-name">Percentage Calculator</div>
+      <div class="tool-desc">Percentage of, change, increase/decrease — all modes covered.</div>
+    </a>
+  </div>
+  <footer>QuickCalc &mdash; Free. Fast. No signup.</footer>
+</div>
+</body>
+</html>
